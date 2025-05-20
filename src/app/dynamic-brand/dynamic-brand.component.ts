@@ -47,16 +47,24 @@ export class DynamicBrandComponent implements OnInit, OnDestroy {
       { id: 7, name: 'realm', issuerid: 'trev' },
       { id: 8, name: 'realm-investment-house', issuerid: 'trev' },
     ];
-    //define a constant id is new client and value is theme.is add client
-    // Mapping names of clients to issuer id
-    const names = issuers.map((issuer: { issuerid: any }) => issuer.issuerid);
-    console.log(names);
 
-    const link = this.renderer.createElement('link');
-    this.renderer.setAttribute(link, 'rel', 'stylesheet');
-    this.renderer.setAttribute(link, 'id', this.themeLinkId);
-    this.renderer.setAttribute(link, 'href', `assets/themes/${brand}.scss`);
-    this.renderer.appendChild(document.head, link);
+    // Find the issuerId that matches the brand name.
+    const issuerId = issuers.find(
+      (i) => i.name === brand.toLocaleLowerCase()
+    )?.issuerid;
+
+    // If issuerId exists, then create the stylesheet link element
+    if (issuerId) {
+      const link = this.renderer.createElement('link');
+      this.renderer.setAttribute(link, 'rel', 'stylesheet');
+      this.renderer.setAttribute(link, 'id', this.themeLinkId);
+      this.renderer.setAttribute(
+        link,
+        'href',
+        `assets/themes/${issuerId}.scss`
+      );
+      this.renderer.appendChild(document.head, link);
+    }
   }
 
   private setFavicon(brand: string): void {
